@@ -1,5 +1,8 @@
 <?php
 
+ini_set('display_errors', 'On');
+error_reporting(E_ALL | E_STRICT);
+
  // Allow from any origin
     if (isset($_SERVER['HTTP_ORIGIN'])) {
         header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
@@ -42,13 +45,13 @@ function getPoints() {
 
         *
 
-        FROM points ORDER BY id LIMIT 10000";
+        FROM points";
 
     try {
         $db = getConnection();
         $stmt = $db->prepare($sql);
         $stmt->execute();
-        $response = $stmt->fetchObject();
+        $response = $stmt->fetchAll();
         $db = null;
         echo json_encode($response);
     } catch(PDOException $e) {
@@ -89,12 +92,12 @@ function savePoint() {
         points
 
         (name, address, city, state, zip,
-            lat, lon, details, notes, db_link)
+            latitude, longitude, details, notes, db_link)
 
         VALUES
 
         (:name, :address, :city, :state, :zip,
-            :lat, :lon, :details, :notes, :db_link)
+            :latitude, :longitude, :details, :notes, :db_link)
 
         ";
 
@@ -106,8 +109,8 @@ function savePoint() {
         $stmt->bindParam("city", $requestjson->city);
         $stmt->bindParam("state", $requestjson->state);
         $stmt->bindParam("zip", $requestjson->zip);
-        $stmt->bindParam("lat", $requestjson->lat);
-        $stmt->bindParam("lon", $requestjson->lon);
+        $stmt->bindParam("latitude", $requestjson->latitude);
+        $stmt->bindParam("longitude", $requestjson->longitude);
         $stmt->bindParam("details", $requestjson->details);
         $stmt->bindParam("notes", $requestjson->notes);
         $stmt->bindParam("db_link", $requestjson->db_link);
@@ -127,7 +130,7 @@ function updatePoint($id) {
 
         name=:name, address=:address,
         city=:city, state=:state,
-        zip=:zip, lat=:lat, lon=:lon,
+        zip=:zip, latitude=:latitude, lon=:longitude,
         details=:details, notes=:notes,
         db_link=:db_link
 
@@ -142,8 +145,8 @@ function updatePoint($id) {
         $stmt->bindParam("city", $requestjson->city);
         $stmt->bindParam("state", $requestjson->state);
         $stmt->bindParam("zip", $requestjson->zip);
-        $stmt->bindParam("lat", $requestjson->lat);
-        $stmt->bindParam("lon", $requestjson->lon);
+        $stmt->bindParam("latitude", $requestjson->latitude);
+        $stmt->bindParam("longitude", $requestjson->longitude);
         $stmt->bindParam("details", $requestjson->details);
         $stmt->bindParam("notes", $requestjson->notes);
         $stmt->bindParam("db_link", $requestjson->db_link);
