@@ -116,6 +116,7 @@ function savePoint() {
         $stmt->bindParam("db_link", $requestjson->db_link);
         $stmt->execute();
         $db = null;
+        echo '{"message":{"text":"done"}}';
     } catch(PDOException $e) {
         echo '{"error":{"text":'. $e->getMessage() .'}}';
     }
